@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "coffee.amo.custom_rarities.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "custom_rarities.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
