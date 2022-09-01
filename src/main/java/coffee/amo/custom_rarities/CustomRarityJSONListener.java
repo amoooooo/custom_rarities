@@ -30,18 +30,16 @@ public class CustomRarityJSONListener extends SimpleJsonResourceReloadListener {
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> object, ResourceManager rm, ProfilerFiller profiler) {
         CustomRarities.LOGGER.info("Loading custom rarity data...");
-        for(int i = 0; i < object.size(); i++){
-            ResourceLocation key = (ResourceLocation) object.keySet().toArray()[i];
-            JsonObject jsonObject = object.get(key).getAsJsonObject();
-            String name = jsonObject.getAsJsonPrimitive("name").getAsString();
-            CustomRarities.LOGGER.info("Loading rarity data for " + name);
-            String color = jsonObject.getAsJsonPrimitive("color").getAsString();
-            JsonArray items = jsonObject.getAsJsonArray("items");
+        object.forEach((key, element) -> {
+            JsonObject obj = element.getAsJsonObject();
+            String name = obj.get("name").getAsString();
+            String color = obj.get("color").getAsString();
+            JsonArray items = obj.get("items").getAsJsonArray();
             for(JsonElement item : items){
                 Item regItem = Registry.ITEM.get(ResourceLocation.tryParse(item.getAsString())).asItem();
                 regItem.rarity = Rarity.create(name, s -> s.withColor(Integer.parseInt(color.replaceFirst("#", ""), 16)));
+                CustomRarities.LOGGER.info("Registered rarity: " + name + " for item: " + regItem.getDefaultInstance().getDisplayName().getString());
             }
-            CustomRarities.LOGGER.info("Loaded rarity data for " + name);
-        }
+        });
     }
 }
